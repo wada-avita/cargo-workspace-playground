@@ -68,24 +68,24 @@ jobs:
     - name: cargo hack check
       run: cargo hack check --each-feature --no-dev-deps --all
 
-  cargo-public-api-crates:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        crate: [axum, axum-core, axum-extra, axum-macros]
-    steps:
-    - uses: actions/checkout@master
-    - uses: dtolnay/rust-toolchain@stable
-      with:
-        toolchain: nightly
-        override: true
-        profile: minimal
-    - uses: Swatinem/rust-cache@v1
-    - name: Install cargo-public-api-crates
-      run: |
-        cargo install --git https://github.com/davidpdrsn/cargo-public-api-crates
-    - name: cargo public-api-crates check
-      run: cargo public-api-crates --manifest-path ${{ matrix.crate }}/Cargo.toml check
+  # cargo-public-api-crates:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       crate: [axum, axum-core, axum-extra, axum-macros]
+  #   steps:
+  #   - uses: actions/checkout@master
+  #   - uses: dtolnay/rust-toolchain@stable
+  #     with:
+  #       toolchain: nightly
+  #       override: true
+  #       profile: minimal
+  #   - uses: Swatinem/rust-cache@v1
+  #   - name: Install cargo-public-api-crates
+  #     run: |
+  #       cargo install --git https://github.com/davidpdrsn/cargo-public-api-crates
+  #   - name: cargo public-api-crates check
+  #     run: cargo public-api-crates --manifest-path ${{ matrix.crate }}/Cargo.toml check
 
   test-versions:
     needs: check
@@ -109,22 +109,22 @@ jobs:
         args: --all --all-features --all-targets
 
   # some examples doesn't support our MSRV so we only test axum itself on our MSRV
-  test-nightly:
-    needs: check
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - uses: dtolnay/rust-toolchain@stable
-      with:
-        # same as `axum-macros/rust-toolchain`
-        toolchain: nightly-2022-11-18
-        override: true
-        profile: minimal
-    - uses: Swatinem/rust-cache@v1
-    - name: Run nightly tests
-      working-directory: axum-macros
-      run: |
-        cargo test
+  # test-nightly:
+  #   needs: check
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@master
+  #   - uses: dtolnay/rust-toolchain@stable
+  #     with:
+  #       # same as `axum-macros/rust-toolchain`
+  #       toolchain: nightly-2022-11-18
+  #       override: true
+  #       profile: minimal
+  #   - uses: Swatinem/rust-cache@v1
+  #   - name: Run nightly tests
+  #     working-directory: axum-macros
+  #     run: |
+  #       cargo test
 
   # some examples doesn't support our MSRV (such as async-graphql)
   # so we only test axum itself on our MSRV
@@ -161,9 +161,8 @@ jobs:
       with:
         command: test
         args: >
-          -p axum
-          -p axum-extra
-          -p axum-core
+          -p sum
+          -p subtract
           --all-features
           --all-targets
           --locked
@@ -199,21 +198,21 @@ jobs:
         command: test
         args: --all-features --doc
 
-  deny-check:
-    name: cargo-deny check
-    runs-on: ubuntu-latest
-    continue-on-error: ${{ matrix.checks == 'advisories' }}
-    strategy:
-      matrix:
-        checks:
-          - advisories
-          - bans licenses sources
-    steps:
-      - uses: actions/checkout@v2
-      - uses: EmbarkStudios/cargo-deny-action@v1
-        with:
-          command: check ${{ matrix.checks }}
-          arguments: --all-features --manifest-path axum/Cargo.toml
+  # deny-check:
+  #   name: cargo-deny check
+  #   runs-on: ubuntu-latest
+  #   continue-on-error: ${{ matrix.checks == 'advisories' }}
+  #   strategy:
+  #     matrix:
+  #       checks:
+  #         - advisories
+  #         - bans licenses sources
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: EmbarkStudios/cargo-deny-action@v1
+  #       with:
+  #         command: check ${{ matrix.checks }}
+  #         arguments: --all-features --manifest-path axum/Cargo.toml
 
   armv5te-unknown-linux-musleabi:
     needs: check
@@ -237,10 +236,8 @@ jobs:
         args: >
           --all-targets
           --all-features
-          -p axum
-          -p axum-core
-          -p axum-extra
-          -p axum-macros
+          -p sum
+          -p subtract
           --target armv5te-unknown-linux-musleabi
 
   wasm32-unknown-unknown:
