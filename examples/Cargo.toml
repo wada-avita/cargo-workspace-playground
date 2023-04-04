@@ -1,0 +1,9 @@
+[package]
+name = "workspace-examples"
+version = "0.0.0"
+publish = false
+edition = "2021"
+
+[dependencies]
+subtract = { version = "0.1.0", path = "../subtract" }
+sum = { version = "0.1.0", path = "../sum" }
