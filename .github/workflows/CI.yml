@@ -129,45 +129,45 @@ jobs:
 
   # some examples doesn't support our MSRV (such as async-graphql)
   # so we only test axum itself on our MSRV
-  # test-msrv:
-  #   needs: check
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@master
-  #   - uses: dtolnay/rust-toolchain@stable
-  #     with:
-  #       toolchain: ${{ env.MSRV }}
-  #       override: true
-  #       profile: minimal
-  #   - name: "install Rust nightly"
-  #     uses: dtolnay/rust-toolchain@stable
-  #     with:
-  #       toolchain: nightly
-  #       profile: minimal
-  #   - uses: Swatinem/rust-cache@v1
-  #   - name: Select minimal versions
-  #     uses: actions-rs/cargo@v1
-  #     with:
-  #       command: update
-  #       args: -Z minimal-versions
-  #       toolchain: nightly
-  #   - name: Fix up Cargo.lock
-  #     uses: actions-rs/cargo@v1
-  #     with:
-  #       command: update
-  #       args: -p crc32fast --precise 1.1.1
-  #       toolchain: nightly
-  #   - name: Run tests
-  #     uses: actions-rs/cargo@v1
-  #     with:
-  #       command: test
-  #       args: >
-  #         -p sum
-  #         -p subtract
-  #         --all-features
-  #         --all-targets
-  #         --locked
-  #       toolchain: ${{ env.MSRV }}
+  test-msrv:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - uses: dtolnay/rust-toolchain@stable
+      with:
+        toolchain: ${{ env.MSRV }}
+        override: true
+        profile: minimal
+    - name: "install Rust nightly"
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        toolchain: nightly
+        profile: minimal
+    - uses: Swatinem/rust-cache@v1
+    - name: Select minimal versions
+      uses: actions-rs/cargo@v1
+      with:
+        command: update
+        args: -Z minimal-versions
+        toolchain: nightly
+    - name: Fix up Cargo.lock
+      uses: actions-rs/cargo@v1
+      with:
+        command: update
+        args: -p crc32fast --precise 1.1.1
+        toolchain: nightly
+    - name: Run tests
+      uses: actions-rs/cargo@v1
+      with:
+        command: test
+        args: >
+          -p sum
+          -p subtract
+          --all-features
+          --all-targets
+          --locked
+        toolchain: ${{ env.MSRV }}
     # the compiler errors are different on our MSRV which makes
     # the trybuild tests in axum-macros fail, so just run the doc
     # tests
