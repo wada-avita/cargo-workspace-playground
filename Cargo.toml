@@ -4,3 +4,6 @@ members = [
   "subtract",
   "sum",
 ]
+# Only check / build main crates by default (check all with `--workspace`)
+default-members = ["subtract", "sum"]
+resolver = "2"
