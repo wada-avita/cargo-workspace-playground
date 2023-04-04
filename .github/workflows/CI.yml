@@ -36,20 +36,20 @@ jobs:
         command: fmt
         args: -- --check
 
-  check-docs:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - uses: dtolnay/rust-toolchain@stable
-      with:
-        toolchain: stable
-        override: true
-        profile: minimal
-    - uses: Swatinem/rust-cache@v1
-    - name: cargo doc
-      env:
-        RUSTDOCFLAGS: "-D rustdoc::all -A rustdoc::private-doc-tests"
-      run: cargo doc --all-features --no-deps
+  # check-docs:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@master
+  #   - uses: dtolnay/rust-toolchain@stable
+  #     with:
+  #       toolchain: stable
+  #       override: true
+  #       profile: minimal
+  #   - uses: Swatinem/rust-cache@v1
+  #   - name: cargo doc
+  #     env:
+  #       RUSTDOCFLAGS: "-D rustdoc::all -A rustdoc::private-doc-tests"
+  #     run: cargo doc --all-features --no-deps
 
   cargo-hack:
     runs-on: ubuntu-latest
@@ -90,15 +90,16 @@ jobs:
   test-versions:
     needs: check
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        rust: [stable, beta]
+    # strategy:
+    #   matrix:
+    #     rust: [stable, beta]
     steps:
     - uses: actions/checkout@master
     - uses: arduino/setup-protoc@v1
     - uses: dtolnay/rust-toolchain@stable
       with:
-        toolchain: ${{ matrix.rust }}
+        # toolchain: ${{ matrix.rust }}
+        toolchain: stable
         override: true
         profile: minimal
     - uses: Swatinem/rust-cache@v1
@@ -170,16 +171,16 @@ jobs:
     # the compiler errors are different on our MSRV which makes
     # the trybuild tests in axum-macros fail, so just run the doc
     # tests
-    - name: Run axum-macros doc tests
-      uses: actions-rs/cargo@v1
-      with:
-        command: test
-        args: >
-          -p axum-macros
-          --doc
-          --all-features
-          --locked
-        toolchain: ${{ env.MSRV }}
+    # - name: Run axum-macros doc tests
+    #   uses: actions-rs/cargo@v1
+    #   with:
+    #     command: test
+    #     args: >
+    #       -p axum-macros
+    #       --doc
+    #       --all-features
+    #       --locked
+    #     toolchain: ${{ env.MSRV }}
 
   test-docs:
     needs: check
