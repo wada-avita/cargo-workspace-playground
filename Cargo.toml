@@ -1,8 +1,6 @@
 [workspace]
 members = [
-  "sum",
-  "subtract",
-
-  # internal
   "examples",
+  "subtract",
+  "sum",
 ]
