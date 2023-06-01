@@ -1,10 +1,10 @@
 [workspace]
 members = [
+  "calculator"
+,
   "examples",
   "subtract",
-  "sum",
-  "calculator"
-]
+  "sum"]
 # Only check / build main crates by default (check all with `--workspace`)
 default-members = ["subtract", "sum", "calculator"]
 resolver = "2"
