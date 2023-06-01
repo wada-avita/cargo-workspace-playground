@@ -3,7 +3,8 @@ members = [
   "examples",
   "subtract",
   "sum",
+  "calculator"
 ]
 # Only check / build main crates by default (check all with `--workspace`)
-default-members = ["subtract", "sum"]
+default-members = ["subtract", "sum", "calculator"]
 resolver = "2"
